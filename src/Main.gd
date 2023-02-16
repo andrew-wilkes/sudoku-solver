@@ -1,8 +1,10 @@
 extends Control
 
+var overflow_counter = 50000
+
 func _ready():
 	get_tree().call_group("solution", "hide")
-	#$"%PuzzleText".text = "..32....6....4..9.1.2...5..7...29....4.3.7.5....81...2..1...8.3.2..8....9....46"
+	$"%PuzzleText".text = "..32....6....4..9.1.2...5..7...29....4.3.7.5....81...2..1...8.3.2..8....9....46"
 
 
 func _on_SolveButton_pressed():
@@ -20,15 +22,18 @@ func _on_SolveButton_pressed():
 		# Remove number from peer cell candidates
 		if grid[idx] > 0:
 			removeNumberFromPeers(idx, numbers[idx], candidates)
-	var start_time = OS.get_ticks_msec()
-	solve(-1, candidates, grid)
-	output.append("Time to solve: %dms" % [OS.get_ticks_msec() - start_time])
+	var start_time = Time.get_ticks_msec()
+	var solved = solve(-1, candidates, grid) && overflow_counter > 0
+	output.append("Running time: %dms" % [Time.get_ticks_msec() - start_time])
+	if not solved:
+		grid = []
+		output.append("Unsolveable puzzle!")
 	show_solution(grid, output)
 
-
 func solve(idx, candidates, grid):
+	overflow_counter -= 1
 	# Check for completion
-	if not grid.has(0): return true
+	if not grid.has(0) || overflow_counter < 1: return true
 	# Find the next empty grid cell with the least number of possible candidates
 	var cell_idx = -1
 	var num_candidates = 10
@@ -88,13 +93,13 @@ func show_solution(grid, output):
 
 
 func array_to_string(arr, delimiter = "\n"):
-	var s = PoolStringArray()
+	var s = PackedStringArray()
 	for n in arr:
 		s.append(str(n))
-	return s.join(delimiter)
+	return delimiter.join(s)
 
 
-func debug(grid, cand):
+func debug(grid, candidates):
 	for row in 9:
 		var rv = []
 		for col in 9:
@@ -104,5 +109,5 @@ func debug(grid, cand):
 	for row in 9:
 		var rv = []
 		for col in 9:
-			rv.append(cand[row * 9 + col])
+			rv.append(candidates[row * 9 + col])
 		print(rv)
