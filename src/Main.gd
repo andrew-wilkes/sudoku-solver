@@ -10,7 +10,7 @@ func _ready():
 func _on_SolveButton_pressed():
 	var numbers = parse_puzzle_text()
 	var output = []
-	var digits = "123456789";
+	var digits = "123456789"
 	var candidates = []
 	candidates.resize(81)
 	candidates.fill(digits)
@@ -30,6 +30,7 @@ func _on_SolveButton_pressed():
 		output.append("Unsolveable puzzle!")
 	show_solution(grid, output)
 
+
 func solve(idx, candidates, grid):
 	overflow_counter -= 1
 	# Check for completion
@@ -45,7 +46,7 @@ func solve(idx, candidates, grid):
 			num_candidates = candidates[idx].length()
 	# Apply number candidates to the grid cell
 	for i in num_candidates:
-		var n = candidates[idx][i];
+		var n = candidates[idx][i]
 		grid[idx] = int(n)
 		var cand_copy = candidates.duplicate()
 		# If removing the number from peers results in no candidates left for
