@@ -21,7 +21,7 @@ func _on_SolveButton_pressed():
 		grid[idx] = int(numbers[idx])
 		# Remove number from peer cell candidates
 		if grid[idx] > 0:
-			removeNumberFromPeers(idx, numbers[idx], candidates)
+			remove_number_from_peers(idx, numbers[idx], candidates)
 	var start_time = Time.get_ticks_msec()
 	var solved = solve(-1, candidates, grid) && overflow_counter > 0
 	output.append("Running time: %dms" % [Time.get_ticks_msec() - start_time])
@@ -38,7 +38,7 @@ func solve(idx, candidates, grid):
 	var cell_idx = -1
 	var num_candidates = 10
 	while(true):
-		idx = getNextEmptyCell(idx, grid)
+		idx = get_next_empty_cell(idx, grid)
 		if cell_idx == idx: break
 		if candidates[idx].length() < num_candidates:
 			cell_idx = idx
@@ -50,7 +50,7 @@ func solve(idx, candidates, grid):
 		var cand_copy = candidates.duplicate()
 		# If removing the number from peers results in no candidates left for
 		# a cell then a dead end was reached
-		removeNumberFromPeers(idx, n, cand_copy)
+		remove_number_from_peers(idx, n, cand_copy)
 		# Recursive call. Unwinds with true if a solution is reached.
 		if solve(idx, cand_copy, grid): return true
 	# Clear the failed candidate from the grid
@@ -58,13 +58,13 @@ func solve(idx, candidates, grid):
 	return false
 
 
-func getNextEmptyCell(idx, grid):
+func get_next_empty_cell(idx, grid):
 	while(true):
 		idx = (idx + 1) % 81
 		if grid[idx] == 0: return idx
 
 
-func removeNumberFromPeers(idx, n, candidates):
+func remove_number_from_peers(idx, n, candidates):
 	var x = idx % 9 # Position along row
 	var y = int(idx / 9) * 9 # Position along column
 	var bx = int(x / 3) * 3 # Box horizontal corner position
