@@ -82,8 +82,7 @@ func removeNumberFromPeers(idx, n, candidates):
 
 
 func parse_puzzle_text():
-	var nums = $"%PuzzleText".text.replace('.', '0')
-	return nums + '0'.repeat(81 - nums.length())
+	return $"%PuzzleText".text.replace('.', '0').rpad(81, '0')
 
 
 func show_solution(grid, output):
