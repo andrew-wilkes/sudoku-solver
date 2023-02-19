@@ -72,14 +72,18 @@ func remove_number_from_peers(idx, n, candidates):
 	var by = int(idx / 27) * 27 # Box vertical corner position
 	for p in 9:
 		# Column
-		candidates[x + p * 9] = candidates[x + p * 9].replace(n, '')
+		remove_num(candidates, x + p * 9, n)
 		# Row
-		candidates[y + p] = candidates[y + p].replace(n, '')
+		remove_num(candidates, y + p, n)
 	# Box
 	for p in 3:
 		for k in 3:
-			candidates[bx + k + by] = candidates[bx + k + by].replace(n, '')
+			remove_num(candidates, bx + k + by, n)
 		by += 9;
+
+
+func remove_num(arr, idx, n):
+	arr[idx] = arr[idx].replace(n, '')
 
 
 func parse_puzzle_text():
